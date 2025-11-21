@@ -66,7 +66,10 @@ function Planet({
   orbitSpeed, 
   rotationSpeed, 
   emissive = '#000000',
-  hasRing = false 
+  hasRing = false,
+  onClick,
+  onHover,
+  isHovered = false
 }) {
   const planetRef = useRef();
   const orbitRef = useRef();
@@ -77,17 +80,38 @@ function Planet({
     }
     if (planetRef.current) {
       planetRef.current.rotation.y += rotationSpeed;
+      
+      // Scale effect on hover
+      const targetScale = isHovered ? 1.15 : 1;
+      planetRef.current.scale.lerp(
+        new THREE.Vector3(targetScale, targetScale, targetScale),
+        0.1
+      );
     }
   });
 
   return (
     <group ref={orbitRef}>
       <group position={[distance, 0, 0]}>
-        <Sphere ref={planetRef} args={[size, 32, 32]}>
+        <Sphere 
+          ref={planetRef} 
+          args={[size, 32, 32]}
+          onClick={onClick}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            document.body.style.cursor = 'pointer';
+            if (onHover) onHover(true);
+          }}
+          onPointerOut={(e) => {
+            e.stopPropagation();
+            document.body.style.cursor = 'default';
+            if (onHover) onHover(false);
+          }}
+        >
           <meshStandardMaterial
             color={color}
             emissive={emissive}
-            emissiveIntensity={0.2}
+            emissiveIntensity={isHovered ? 0.5 : 0.2}
             roughness={0.8}
             metalness={0.3}
           />
@@ -156,12 +180,28 @@ function AsteroidBelt() {
 }
 
 // Main Solar System Scene
-function SolarSystemScene({ onSunClick, setIsHovered }) {
+function SolarSystemScene({ onSunClick, setIsHovered, onPlanetHover }) {
   const [localIsHovered, setLocalIsHovered] = useState(false);
+  const [hoveredPlanet, setHoveredPlanet] = useState(null);
 
   const handleHover = (hovered) => {
     setLocalIsHovered(hovered);
     if (setIsHovered) setIsHovered(hovered);
+    if (hovered) {
+      handlePlanetHover('sun', true);
+    } else if (hoveredPlanet === 'sun') {
+      handlePlanetHover(null, false);
+    }
+  };
+  
+  const handlePlanetHover = (planetName, hovered) => {
+    if (hovered) {
+      setHoveredPlanet(planetName);
+      if (onPlanetHover) onPlanetHover(planetName);
+    } else {
+      setHoveredPlanet(null);
+      if (onPlanetHover) onPlanetHover(null);
+    }
   };
 
   return (
@@ -173,10 +213,30 @@ function SolarSystemScene({ onSunClick, setIsHovered }) {
       <Sun onClick={onSunClick} isHovered={localIsHovered} setIsHovered={handleHover} />
       
       {/* Mercury */}
-      <Planet distance={4} size={0.4} color="#b5a393" orbitSpeed={0.008} rotationSpeed={0.01} emissive="#8c7853" />
+      <Planet 
+        distance={4} 
+        size={0.4} 
+        color="#b5a393" 
+        orbitSpeed={0.008} 
+        rotationSpeed={0.01} 
+        emissive="#8c7853"
+        onClick={() => handlePlanetHover('mercury', true)}
+        onHover={(hovered) => handlePlanetHover('mercury', hovered)}
+        isHovered={hoveredPlanet === 'mercury'}
+      />
       
       {/* Venus */}
-      <Planet distance={6} size={0.65} color="#ffd700" orbitSpeed={0.006} rotationSpeed={0.008} emissive="#ffb700" />
+      <Planet 
+        distance={6} 
+        size={0.65} 
+        color="#ffd700" 
+        orbitSpeed={0.006} 
+        rotationSpeed={0.008} 
+        emissive="#ffb700"
+        onClick={() => handlePlanetHover('venus', true)}
+        onHover={(hovered) => handlePlanetHover('venus', hovered)}
+        isHovered={hoveredPlanet === 'venus'}
+      />
       
       {/* Earth */}
       <Planet 
@@ -186,10 +246,23 @@ function SolarSystemScene({ onSunClick, setIsHovered }) {
         orbitSpeed={0.005} 
         rotationSpeed={0.02}
         emissive="#3a7ac8"
+        onClick={() => handlePlanetHover('earth', true)}
+        onHover={(hovered) => handlePlanetHover('earth', hovered)}
+        isHovered={hoveredPlanet === 'earth'}
       />
       
       {/* Mars */}
-      <Planet distance={10} size={0.5} color="#e57373" orbitSpeed={0.004} rotationSpeed={0.018} emissive="#cd5c5c" />
+      <Planet 
+        distance={10} 
+        size={0.5} 
+        color="#e57373" 
+        orbitSpeed={0.004} 
+        rotationSpeed={0.018} 
+        emissive="#cd5c5c"
+        onClick={() => handlePlanetHover('mars', true)}
+        onHover={(hovered) => handlePlanetHover('mars', hovered)}
+        isHovered={hoveredPlanet === 'mars'}
+      />
       
       {/* Asteroid Belt */}
       <AsteroidBelt />
@@ -202,6 +275,9 @@ function SolarSystemScene({ onSunClick, setIsHovered }) {
         orbitSpeed={0.002} 
         rotationSpeed={0.04}
         emissive="#a67c3a"
+        onClick={() => handlePlanetHover('jupiter', true)}
+        onHover={(hovered) => handlePlanetHover('jupiter', hovered)}
+        isHovered={hoveredPlanet === 'jupiter'}
       />
       
       {/* Saturn */}
@@ -213,13 +289,36 @@ function SolarSystemScene({ onSunClick, setIsHovered }) {
         rotationSpeed={0.035}
         hasRing={true}
         emissive="#d4a054"
+        onClick={() => handlePlanetHover('saturn', true)}
+        onHover={(hovered) => handlePlanetHover('saturn', hovered)}
+        isHovered={hoveredPlanet === 'saturn'}
       />
       
       {/* Uranus */}
-      <Planet distance={26} size={0.85} color="#6fe5f5" orbitSpeed={0.001} rotationSpeed={0.025} emissive="#4fd0e0" />
+      <Planet 
+        distance={26} 
+        size={0.85} 
+        color="#6fe5f5" 
+        orbitSpeed={0.001} 
+        rotationSpeed={0.025} 
+        emissive="#4fd0e0"
+        onClick={() => handlePlanetHover('uranus', true)}
+        onHover={(hovered) => handlePlanetHover('uranus', hovered)}
+        isHovered={hoveredPlanet === 'uranus'}
+      />
       
       {/* Neptune */}
-      <Planet distance={30} size={0.85} color="#5a8fff" orbitSpeed={0.0008} rotationSpeed={0.022} emissive="#4169e1" />
+      <Planet 
+        distance={30} 
+        size={0.85} 
+        color="#5a8fff" 
+        orbitSpeed={0.0008} 
+        rotationSpeed={0.022} 
+        emissive="#4169e1"
+        onClick={() => handlePlanetHover('neptune', true)}
+        onHover={(hovered) => handlePlanetHover('neptune', hovered)}
+        isHovered={hoveredPlanet === 'neptune'}
+      />
 
       <OrbitControls
         enableZoom={true}
@@ -238,6 +337,55 @@ function IntroPage() {
   const navigate = useNavigate();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [hoveredPlanet, setHoveredPlanet] = useState(null);
+
+  const planetQuotes = {
+    sun: {
+      icon: '☀️',
+      name: 'Sun',
+      quote: 'Central Mail Server — everything eventually lands here, even the stuff you regret sending.'
+    },
+    mercury: {
+      icon: '🌑',
+      name: 'Mercury',
+      quote: 'Fastest Email Delivery — hits your inbox before you even finish typing.'
+    },
+    venus: {
+      icon: '🌕',
+      name: 'Venus',
+      quote: 'Overheated Mailbox — full of unread messages and emotional emails.'
+    },
+    earth: {
+      icon: '🌍',
+      name: 'Earth',
+      quote: 'User Inbox — organized chaos, spam included.'
+    },
+    mars: {
+      icon: '🔴',
+      name: 'Mars',
+      quote: 'Promotions Tab — looks exciting, but you rarely open it.'
+    },
+    jupiter: {
+      icon: '🪐',
+      name: 'Jupiter',
+      quote: 'Spam Filter — massive, powerful, and blocks everything suspicious.'
+    },
+    saturn: {
+      icon: '🪐',
+      name: 'Saturn',
+      quote: 'Drafts Folder — beautiful rings, unfinished emails.'
+    },
+    uranus: {
+      icon: '🌀',
+      name: 'Uranus',
+      quote: "The 'Unread' Section — tilted, ignored, and growing every day."
+    },
+    neptune: {
+      icon: '🧊',
+      name: 'Neptune',
+      quote: 'Archive Folder — deep, cold, and emails vanish forever.'
+    }
+  };
 
   const handleSunClick = () => {
     setIsTransitioning(true);
@@ -245,15 +393,23 @@ function IntroPage() {
       navigate('/login');
     }, 1500);
   };
+  
+  const handlePlanetHover = (planet) => {
+    setHoveredPlanet(planet);
+  };
 
   return (
     <div className={`intro-page ${isTransitioning ? 'transitioning' : ''}`}>
       <div className="canvas-container">
         <Canvas
-          camera={{ position: [0, 20, 35], fov: 60 }}
+          camera={{ position: [0, 0, 35], fov: 60 }}
           gl={{ antialias: true, alpha: false }}
         >
-          <SolarSystemScene onSunClick={handleSunClick} setIsHovered={setIsHovered} />
+          <SolarSystemScene 
+            onSunClick={handleSunClick} 
+            setIsHovered={setIsHovered}
+            onPlanetHover={handlePlanetHover}
+          />
         </Canvas>
       </div>
       
@@ -262,7 +418,17 @@ function IntroPage() {
         <p className="subtitle">AI-Powered Email Organization System</p>
       </div>
 
-      {isHovered && !isTransitioning && (
+      {hoveredPlanet && planetQuotes[hoveredPlanet] && !isTransitioning && (
+        <div className="planet-tooltip">
+          <div className="tooltip-icon">{planetQuotes[hoveredPlanet].icon}</div>
+          <div className="tooltip-content">
+            <div className="tooltip-name">{planetQuotes[hoveredPlanet].name}</div>
+            <div className="tooltip-quote">{planetQuotes[hoveredPlanet].quote}</div>
+          </div>
+        </div>
+      )}
+
+      {isHovered && !isTransitioning && !hoveredPlanet && (
         <div className="sun-hint">
           <span className="pulse-dot"></span>
           Click the Sun

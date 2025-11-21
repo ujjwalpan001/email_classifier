@@ -31,9 +31,13 @@ function Dashboard() {
       return;
     }
 
-    fetchUserData();
-    fetchEmails();
-    fetchNotifications();
+    const initializeDashboard = async () => {
+      await fetchUserData();
+      await fetchNotifications();
+      await fetchEmails();
+    };
+
+    initializeDashboard();
 
     // Poll for new emails every 30 seconds
     const interval = setInterval(() => {
