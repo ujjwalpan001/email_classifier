@@ -1,0 +1,300 @@
+# EMAIL CLASSIFIER - SETUP & RUN INSTRUCTIONS
+
+## 🚀 Project Overview
+
+This is a professional email classification system with:
+- **Frontend**: React with advanced 3D animations (Three.js)
+  - Intro page with realistic solar system
+  - Login/Signup with holographic effects
+  - Dashboard with email management and real-time notifications
+  
+- **Backend**: FastAPI with MongoDB
+  - User authentication (JWT)
+  - IMAP email extraction from Gmail
+  - ML-based email classification (Urgent, HR, Financial, General)
+  - Real-time notifications
+
+## 📋 Prerequisites
+
+Before running the project, ensure you have:
+
+1. **Python 3.8+** installed
+   - Check: `python --version`
+   
+2. **Node.js 14+** and npm installed
+   - Check: `node --version` and `npm --version`
+   
+3. **MongoDB** installed and running
+   - Download from: https://www.mongodb.com/try/download/community
+   - Start MongoDB service
+   - Default connection: `mongodb://localhost:27017`
+
+## 🔧 Quick Setup (Automated)
+
+### Option 1: Complete Setup
+Run the master setup script:
+```batch
+SETUP.bat
+```
+
+This will set up both frontend and backend automatically.
+
+### Option 2: Manual Setup
+
+#### Backend Setup:
+```batch
+cd backend
+setup.bat
+```
+
+#### Frontend Setup:
+```batch
+cd frontend
+setup.bat
+```
+
+## ▶️ Running the Application
+
+### Step 1: Start MongoDB
+Make sure MongoDB is running on your system.
+
+### Step 2: Start Backend (Terminal 1)
+```batch
+cd backend
+start_backend.bat
+```
+
+The API will be available at: `http://localhost:8000`
+API docs at: `http://localhost:8000/docs`
+
+### Step 3: Start Frontend (Terminal 2)
+```batch
+cd frontend
+start_frontend.bat
+```
+
+The app will open at: `http://localhost:3000`
+
+## 🎨 Frontend Pages
+
+### 1. Intro Page (/)
+- **3D Solar System**: Realistic animated solar system with planets orbiting
+- **Interactive Sun**: Click the sun to transition to login page
+- Features: Orbital paths, asteroid belt, dynamic lighting, auto-rotate camera
+
+### 2. Login/Signup Page (/login)
+- **3D Holographic Sphere**: Rotating distorted sphere with particle effects
+- **Multiple Rings**: Animated rotating rings around the sphere
+- **Smooth Transitions**: Card animations and gradient effects
+- Toggle between login and signup forms
+
+### 3. Dashboard (/dashboard)
+- **Profile Section**: 
+  - Username and email display
+  - IMAP configuration settings
+  - Logout functionality
+  
+- **Notifications**: 
+  - Real-time email notifications
+  - Category-based alerts (Urgent, HR, Financial, General)
+  - Notification badges
+  
+- **Email Management**:
+  - Filter by category (All, Urgent, HR, Financial, General)
+  - Email cards with classification labels
+  - Confidence scores for each classification
+  - Sync emails button
+  
+## 🔐 Gmail IMAP Setup
+
+To sync emails from Gmail:
+
+1. **Enable 2-Factor Authentication** on your Google account
+2. **Generate App Password**:
+   - Go to: https://myaccount.google.com/apppasswords
+   - Select app: Mail
+   - Select device: Other (Custom name)
+   - Click "Generate"
+   - Copy the 16-character password
+
+3. **Configure in Dashboard**:
+   - Click profile icon → "IMAP Settings"
+   - Enter your Gmail address
+   - Paste the app password
+   - Click "Save & Sync"
+
+## 🤖 ML Model
+
+The system uses scikit-learn for email classification:
+
+- **Algorithm**: Multinomial Naive Bayes
+- **Features**: TF-IDF vectorization with bigrams
+- **Categories**: 
+  - 🚨 Urgent (high-priority, time-sensitive)
+  - 👥 HR (employee-related, benefits, policies)
+  - 💰 Financial (invoices, payments, transactions)
+  - 📧 General (standard communications)
+
+### Training the Model
+
+The model is automatically trained during setup. To retrain:
+
+```batch
+cd backend
+venv\Scripts\activate
+python train_model.py
+```
+
+## 📁 Project Structure
+
+```
+email_classifier/
+├── frontend/
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── IntroPage.js         # 3D Solar System
+│   │   │   ├── IntroPage.css
+│   │   │   ├── LoginPage.js         # Login/Signup
+│   │   │   ├── LoginPage.css
+│   │   │   ├── Dashboard.js         # Main Dashboard
+│   │   │   └── Dashboard.css
+│   │   ├── App.js
+│   │   ├── App.css
+│   │   ├── index.js
+│   │   └── index.css
+│   ├── package.json
+│   ├── .env
+│   └── .gitignore
+│
+├── backend/
+│   ├── model/
+│   │   ├── classifier.py            # ML Model
+│   │   └── __init__.py
+│   ├── services/
+│   │   ├── email_service.py         # IMAP & Email Processing
+│   │   └── __init__.py
+│   ├── main.py                      # FastAPI Application
+│   ├── train_model.py               # Model Training Script
+│   ├── requirements.txt
+│   ├── .env
+│   └── .gitignore
+│
+├── SETUP.bat                        # Master setup script
+└── INSTRUCTIONS.txt                 # This file
+```
+
+## 🔑 API Endpoints
+
+### Authentication
+- `POST /api/auth/signup` - Create new user
+- `POST /api/auth/login` - Login user (returns JWT token)
+
+### IMAP Configuration
+- `POST /api/imap/setup` - Save IMAP credentials
+- `POST /api/imap/sync` - Sync emails from Gmail
+
+### Emails & Notifications
+- `GET /api/emails` - Get user's classified emails
+- `GET /api/notifications` - Get user's notifications
+
+## 🎯 Features
+
+### Frontend
+✅ Advanced 3D animations with Three.js and React Three Fiber
+✅ Realistic solar system with orbital mechanics
+✅ Holographic login page effects
+✅ Responsive design
+✅ Real-time notifications with toast messages
+✅ Category-based email filtering
+✅ Profile management
+✅ Smooth page transitions
+
+### Backend
+✅ RESTful API with FastAPI
+✅ JWT-based authentication
+✅ MongoDB integration (async with Motor)
+✅ IMAP email extraction from Gmail
+✅ ML-based email classification
+✅ Automatic email categorization
+✅ Notification system
+✅ CORS enabled for frontend integration
+
+## 🔒 Security Notes
+
+1. **Change the SECRET_KEY** in `backend/.env` for production
+2. **Never commit** `.env` files to version control
+3. **Use HTTPS** in production
+4. **IMAP passwords** are stored in database (encrypt in production)
+5. **Enable rate limiting** for API endpoints in production
+
+## 🐛 Troubleshooting
+
+### MongoDB Connection Issues
+- Ensure MongoDB is running: `net start MongoDB`
+- Check connection string in `backend/.env`
+
+### Backend Import Errors
+- Activate virtual environment first
+- Reinstall dependencies: `pip install -r requirements.txt`
+
+### Frontend Not Starting
+- Delete `node_modules` and run `npm install` again
+- Check if port 3000 is available
+
+### IMAP Sync Fails
+- Verify Gmail app password is correct
+- Check if 2FA is enabled on Google account
+- Ensure IMAP is enabled in Gmail settings
+
+## 📧 Testing
+
+1. **Signup**: Create a new account
+2. **Login**: Sign in with credentials
+3. **Configure IMAP**: Add Gmail credentials
+4. **Sync Emails**: Click "Sync Emails" button
+5. **View Classifications**: Check email categories
+6. **Filter**: Use category filters
+7. **Notifications**: Check for urgent email alerts
+
+## 🚀 Production Deployment
+
+For production deployment:
+
+1. **Frontend**:
+   - Run `npm run build`
+   - Serve the `build/` folder with nginx or similar
+   - Update `REACT_APP_API_URL` to production API URL
+
+2. **Backend**:
+   - Use production ASGI server (gunicorn + uvicorn)
+   - Set up proper MongoDB cluster
+   - Configure environment variables
+   - Enable HTTPS
+   - Set up monitoring and logging
+
+3. **Database**:
+   - Use MongoDB Atlas or self-hosted cluster
+   - Enable authentication
+   - Set up backups
+
+## 📝 Notes
+
+- The ML model is pre-trained with sample data
+- Add more training data in `backend/model/classifier.py` for better accuracy
+- Email sync is manual - click "Sync Emails" button
+- Auto-sync can be implemented with background tasks
+- Notifications are stored in database and shown in UI
+
+## 🤝 Support
+
+For issues or questions:
+1. Check MongoDB is running
+2. Verify all dependencies are installed
+3. Check console/terminal for error messages
+4. Ensure ports 3000 and 8000 are available
+
+---
+
+**Enjoy your AI-powered Email Classifier! 📧✨**
