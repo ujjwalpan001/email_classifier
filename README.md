@@ -16,15 +16,9 @@ An intelligent AI-powered email organization system with a stunning 3D solar sys
 - **Smooth Transitions**: Professional animations throughout the application
 
 ### 🤖 AI-Powered Classification
-- **Automatic Categorization**: ML model classifies emails into categories:
-  - 🚨 Urgent (Precision: 1.00, Recall: 0.94, F1-Score: 0.97)
-  - 👥 HR (Precision: 0.90, Recall: 0.89, F1-Score: 0.90)
-  - 💰 Financial (Precision: 0.77, Recall: 0.92, F1-Score: 0.84)
-  - 📧 General (Precision: 0.90, Recall: 0.98, F1-Score: 0.93)
-- **High Accuracy**: 93.97% overall accuracy on test dataset
+- **Automatic Categorization**: ML model classifies emails into 4 categories
 - **TF-IDF Vectorization**: Advanced text processing for accurate classification
 - **Real-time Processing**: Instant categorization as emails are synced
-- **Robust Performance**: Weighted avg F1-Score of 0.94 across 103,481 samples
 
 ### 📬 Email Management
 - **Gmail Integration**: Direct IMAP connection to fetch emails
@@ -193,13 +187,8 @@ email_classifier/
 
 ### Machine Learning
 - **TF-IDF Vectorizer**: Text feature extraction
-- **Classification Model**: Email category prediction with 93.97% accuracy
+- **Classification Model**: Email category prediction
 - **Joblib**: Model serialization
-- **Performance Metrics**:
-  - Overall Accuracy: 93.97%
-  - Macro Average F1-Score: 0.91
-  - Weighted Average F1-Score: 0.94
-  - Test Dataset: 103,481 samples
 
 ## 🔧 Configuration
 
