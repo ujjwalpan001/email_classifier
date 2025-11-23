@@ -250,7 +250,9 @@ REACT_APP_API_URL=http://localhost:8000
 - **Overall Accuracy**: 93.97%
 - **Macro Average**: Precision 0.89, Recall 0.93, F1-Score 0.91
 - **Weighted Average**: Precision 0.94, Recall 0.94, F1-Score 0.94
-- **Training Dataset**: 103,481 email samples
+- **Total Dataset**: 500,000 email samples
+- **Training Set**: 350,000 samples (70%)
+- **Testing Set**: 150,000 samples (30%)
 
 ### 3D Solar System Mapping
 - ☀️ **Sun**: Central Mail Server
