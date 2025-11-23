@@ -114,6 +114,8 @@ email_classifier/
 ├── backend/
 │   ├── main.py              # FastAPI application & routes
 │   ├── imap_handler.py      # Email fetching & IMAP logic
+│   ├── model/
+│   │   └── classifier.py    # ML inference engine for email classification
 │   ├── requirements.txt     # Python dependencies
 │   └── venv/               # Virtual environment
 ├── frontend/
@@ -127,8 +129,6 @@ email_classifier/
 │   │   └── index.js
 │   ├── package.json
 │   └── public/
-├── model/
-│   └── train_model.py      # ML model training script
 ├── model.pkl               # Trained classification model
 ├── tfidf.pkl              # TF-IDF vectorizer
 └── README.md
