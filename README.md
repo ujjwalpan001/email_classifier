@@ -281,7 +281,7 @@ This project is licensed under the MIT License.
 
 ## 👨‍💻 Author
 
-**Ujjwal Pan**
+**Ujjawal Pandey**
 - GitHub: [@ujjwalpan001](https://github.com/ujjwalpan001)
 
 ## 🙏 Acknowledgments
